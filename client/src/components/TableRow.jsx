@@ -1,18 +1,44 @@
-import React from 'react'
+import React from "react";
+import { useStore } from "../store";
 
-const TableRow = () => {
+const TableRow = ({ id, name, email, job, rate, status }) => {
+  const { toggleModal, removeClient } = useStore();
+
+
   return (
     <tr>
-        <th>1</th>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
-        <td>300</td>
-        <td><button className="btn btn-dash btn-success rounded-4xl">Active</button></td>
-        <td><button className="btn btn-soft btn-info rounded-md">Update</button></td>
-        <td><button className="btn btn-soft btn-error rounded-md">Remove</button></td>
-      </tr>
-  )
-}
+      <th>{id}</th>
+      <td>{name}</td>
+      <td>{email}</td>
+      <td>{job}</td>
+      <td>{rate}</td>
+      <td>
+        <span
+          className={`badge ${
+            status === "active" ? "badge-success" : "badge-warning"
+          } badge-outline p-4 rounded-4xl uppercase`}
+        >
+          {status}
+        </span>
+      </td>
+      <td>
+        <button
+          className="btn btn-soft btn-info rounded-md"
+          onClick={() => toggleModal(id)}
+        >
+          Update
+        </button>
+      </td>
+      <td>
+        <button
+          className="btn btn-soft btn-error rounded-md"
+          onClick={() => removeClient(id)}
+        >
+          Remove
+        </button>
+      </td>
+    </tr>
+  );
+};
 
-export default TableRow
+export default TableRow;
