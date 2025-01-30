@@ -1,4 +1,5 @@
 import "./App.css";
+import { Modal } from "./components/Modal";
 import { Navbar } from "./components/Navbar";
 import { Table } from "./components/Table";
 
@@ -7,6 +8,7 @@ function App() {
     <>
       <Navbar/>
       <Table/>
+      <Modal/>
     </>
   )
 }
