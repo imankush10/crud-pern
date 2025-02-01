@@ -1,9 +1,6 @@
-import express from "express";
-import cors from "cors";
-import clientRoutes from "./routes/clientRoutes.js";
-import dotenv from "dotenv";
-
-dotenv.config();
+const express = require("express");
+const cors = require("cors");
+const clientRoutes = require("./routes/userRoutes");
 
 const app = express();
 

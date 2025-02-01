@@ -1,4 +1,5 @@
 import "./App.css";
+import HelloClients from "./components/HelloClients";
 import { Modal } from "./components/Modal";
 import { Navbar } from "./components/Navbar";
 import { Table } from "./components/Table";
@@ -6,9 +7,10 @@ import { Table } from "./components/Table";
 function App() {
   return(
     <>
-      <Navbar/>
+      {/* <Navbar/>
       <Table/>
-      <Modal/>
+      <Modal/> */}
+      <HelloClients/>
     </>
   )
 }
