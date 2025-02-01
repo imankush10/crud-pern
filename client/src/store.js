@@ -1,39 +1,5 @@
 import { create } from "zustand";
-
-const clients = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    email: "alice.johnson@gmail.com",
-    job: "Software Developer",
-    rate: 52,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Bob Williams",
-    email: "bob.williams@yahoo.com",
-    job: "Graphic Designer",
-    rate: 45,
-    status: "inactive",
-  },
-  {
-    id: 3,
-    name: "Charlie Smith",
-    email: "charlie.smith@outlook.com",
-    job: "Data Analyst",
-    rate: 60,
-    status: "active",
-  },
-  {
-    id: 4,
-    name: "Diana Lopez",
-    email: "diana.lopez@company.com",
-    job: "Marketing Manager",
-    rate: 55,
-    status: "inactive",
-  },
-];
+import axios from "axios";
 
 const defaultClient = {
   id: null,
@@ -41,17 +7,28 @@ const defaultClient = {
   email: "",
   job: "",
   rate: 0,
-  status: "active",
+  status: "true",
 };
 
 export const useStore = create((set) => ({
-  clients,
+  clients: [],
   currentClient: { ...defaultClient },
   isModalOpen: false,
   editMode: false,
   searchQuery: "",
-  
+
   setSearchQuery: (query) => set({ searchQuery: query }),
+
+  fetchClients: async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/clients");
+      console.log(res.data)
+      set({ clients: res.data });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
   toggleModal: (id) =>
     set((state) => {
       if (id) {

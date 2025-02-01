@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TableRow from "./TableRow";
 import { useStore } from "../store";
 
 export const Table = () => {
-  const { clients, searchQuery } = useStore();
+  const { clients, searchQuery, fetchClients } = useStore();
 
-  const filteredClients = clients.filter(
+  useEffect(() => {
+    fetchClients();
+  }, []);
+
+  const filteredClients = clients?.filter(
     (client) =>
       client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       client.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      client.job.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      client.status.toLowerCase().includes(searchQuery.toLowerCase())
+      client.job.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -35,7 +38,7 @@ export const Table = () => {
               email={client.email}
               job={client.job}
               rate={client.rate}
-              status={client.status}
+              status={client.status == true ? "active" : "inactive"}
               key={client.email}
             />
           ))}
