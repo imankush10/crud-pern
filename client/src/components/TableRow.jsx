@@ -15,8 +15,8 @@ const TableRow = ({ id, name, email, job, rate, status }) => {
       <td>
         <span
           className={`badge ${
-            status === "active" ? "badge-success" : "badge-warning"
-          } badge-outline p-4 rounded-4xl uppercase`}
+            status === "ACTIVE" ? "badge-success" : "badge-warning"
+          } badge-outline p-4 rounded-4xl`}
         >
           {status}
         </span>

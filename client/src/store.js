@@ -7,32 +7,22 @@ const defaultClient = {
   email: "",
   job: "",
   rate: 0,
-  status: "true",
+  status: "ACTIVE",
 };
 
 export const useStore = create((set) => ({
   clients: [],
-  currentClient: { ...defaultClient },
-  isModalOpen: false,
-  editMode: false,
-  searchQuery: "",
 
+  searchQuery: "",
   setSearchQuery: (query) => set({ searchQuery: query }),
 
-  fetchClients: async () => {
-    try {
-      const res = await axios.get("http://localhost:3000/api/clients");
-      console.log(res.data)
-      set({ clients: res.data });
-    } catch (err) {
-      console.log(err);
-    }
-  },
+  editMode: false,
+  isModalOpen: false,
 
   toggleModal: (id) =>
     set((state) => {
       if (id) {
-        const client = clients.find((element) => element.id == id);
+        const client = state.clients.find((element) => element.id == id);
         return {
           isModalOpen: !state.isModalOpen,
           currentClient: client,
@@ -45,44 +35,61 @@ export const useStore = create((set) => ({
           currentClient: { ...defaultClient },
         };
     }),
+
+  currentClient: { ...defaultClient },
   updateCurrentClient: (key, value) => {
     set((state) => ({
       currentClient: { ...state.currentClient, [key]: value },
     }));
   },
-  addClient: () =>
-    set((state) => {
-      console.log(state.currentClient);
-      const newClient = {
-        ...state.currentClient,
-        id: state.clients.length + 1,
-      };
 
-      return {
-        clients: [...state.clients, newClient],
+  fetchClients: async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/clients");
+      set({ clients: res.data });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  addClient: async () => {
+    const { currentClient, fetchClients } = useStore.getState();
+    try {
+      await axios.post("http://localhost:3000/api/clients/add", currentClient);
+      await fetchClients();
+      set({
         currentClient: { ...defaultClient },
         isModalOpen: false,
-      };
-    }),
-  updateClient: () =>
-    set((state) => {
-      return {
-        clients: state.clients.map((client) =>
-          client.id === state.currentClient.id
-            ? { ...state.currentClient }
-            : client
-        ),
-        currentClient: { ...defaultClient },
-        isModalOpen: false,
-      };
-    }),
-  removeClient: (id) => {
-    set((state) => {
-      return {
-        clients: state.clients.filter((client) => client.id != id),
-        currentClient: { ...defaultClient },
-        isModalOpen: false,
-      };
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  updateClient: async () => {
+    const { currentClient, fetchClients } = useStore.getState();
+    await axios.put("http://localhost:3000/api/clients/update", currentClient);
+
+    await fetchClients();
+
+    set({
+      currentClient: { ...defaultClient },
+      isModalOpen: false,
+    });
+  },
+  removeClient: async (id) => {
+    const { fetchClients } = useStore.getState();
+    await axios.delete("http://localhost:3000/api/clients/delete", {
+      headers: {
+        id,
+      },
+    });
+
+    await fetchClients();
+
+    set({
+      currentClient: { ...defaultClient },
+      isModalOpen: false,
     });
   },
 }));

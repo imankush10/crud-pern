@@ -38,7 +38,7 @@ export const Table = () => {
               email={client.email}
               job={client.job}
               rate={client.rate}
-              status={client.status == true ? "active" : "inactive"}
+              status={client.status}
               key={client.email}
             />
           ))}
